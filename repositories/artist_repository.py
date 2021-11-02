@@ -63,3 +63,14 @@ def list_all_artist_names():
     results = run_sql(sql)
     for row in results:
         print(row)
+
+def delete_artist_by_id(id):
+    sql = "DELETE FROM artists WHERE id = %s"
+    values = [id]
+    run_sql(sql, values)
+
+# def edit_artist_name(artist):
+#     name = input("\nEnter the artist's name: ")
+#     sql = "UPDATE artists SET (full_name) = (%s) WHERE id = %s"
+#     values = [name, artist.id]
+#     run_sql(sql, values)

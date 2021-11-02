@@ -17,7 +17,7 @@ def select_all():
     results = run_sql(sql)
     for row in results:
         artist = artist_repository.select_artist_by_id(row["artist_id"])
-        album = Album(row["title"], row["genre"], artist)
+        album = Album(row["title"], row["genre"], artist, row["id"])
         albums.append(album)
     return albums
 
@@ -37,6 +37,11 @@ def create_and_save_album():
         album.id = id
     else:
         print("ERROR: artist not found. Please create the artist first.")
+
+def delete_album_by_id(id):
+    sql = "DELETE FROM albums WHERE id = %s"
+    values = [id]
+    run_sql(sql, values)
     
 def delete_all_albums():
     sql = "DELETE FROM albums"
@@ -48,3 +53,17 @@ def list_all_album_titles():
     results = run_sql(sql)
     for row in results:
         print(row)
+
+def list_albums_by(artist):
+    print("")
+    sql = "SELECT title FROM albums WHERE artist_id = %s"
+    values = [artist.id]
+    results = run_sql(sql, values)
+    for row in results:
+        print(row)
+
+def edit_album_title(album):
+    title = input("\nEnter the albums's title: ")
+    sql = "UPDATE albums SET (title, genre, artist_id) = (%s, %s, %s) WHERE id = %s"
+    values = [title, album.genre, album.artist.id, album.id]
+    run_sql(sql, values)
